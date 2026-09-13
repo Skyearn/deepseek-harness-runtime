@@ -31,10 +31,12 @@ jobs:
         with:
           node-version: 24
 
-      - name: Get latest @deepseek-ai/dsh version
+      - name: Resolve @deepseek-ai/dsh version to mirror
         id: version
         run: |
-          DSH_VERSION="$(npm view @deepseek-ai/dsh version)"
+          # `latest` lags every prerelease (they are published under `next`), so
+          # resolve the newest of `next` and `latest` instead of reading `latest`.
+          DSH_VERSION="$(node scripts/latest-dsh-version.mjs)"
           echo "dsh=${DSH_VERSION}" >> "$GITHUB_OUTPUT"
 
       - name: Check if runtime release already exists
